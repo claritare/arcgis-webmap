@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
-  <title>My ArcGIS Web Map</title>
+  <title>Clara Revollo - ArcGIS Web Map</title>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.29/"></script>
@@ -17,10 +16,29 @@
       height: 100%;
       width: 100%;
     }
+
+    #titleDiv {
+      position: absolute;
+      z-index: 99;
+      background: white;
+      padding: 8px 12px;
+      top: 10px;
+      left: 50px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
   </style>
 </head>
 
 <body>
+
+  <div id="titleDiv">
+    Clara Revollo - Student #000921299 - ArcGIS JS Web Map Assignment 
+  </div>
+
   <div id="viewDiv"></div>
 
   <script>
@@ -32,20 +50,24 @@
       "esri/widgets/Search",
       "esri/widgets/ScaleBar",
       "esri/widgets/Measurement",
+      "esri/widgets/BasemapToggle",
       "esri/layers/GraphicsLayer"
-    ], function (Map, MapView, Home, Sketch, Search, ScaleBar, Measurement, GraphicsLayer) {
+    ], function (Map, MapView, Home, Sketch, Search, ScaleBar, Measurement, BasemapToggle, GraphicsLayer) {
 
+      // Graphics layer for Sketch drawings
       const graphicsLayer = new GraphicsLayer();
 
+      // Create map with satellite basemap
       const map = new Map({
-        basemap: "streets-navigation-vector",
+        basemap: "satellite",
         layers: [graphicsLayer]
       });
 
+      // Create MapView centered at Mohawk College
       const view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-79.8881, 43.2385], // Mohawk College
+        center: [-79.8881, 43.2385],
         zoom: 14
       });
 
@@ -79,6 +101,13 @@
         view: view
       });
       view.ui.add(measurement, "bottom-right");
+
+      // BASEMAP TOGGLE (switch between satellite and streets)
+      const basemapToggle = new BasemapToggle({
+        view: view,
+        nextBasemap: "streets-navigation-vector"
+      });
+      view.ui.add(basemapToggle, "bottom-right");
 
     });
   </script>
