@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+  <title>My ArcGIS Web Map</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.29/"></script>
+
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/widgets/Home",
+      "esri/widgets/Sketch",
+      "esri/widgets/Search",
+      "esri/widgets/ScaleBar",
+      "esri/widgets/Measurement",
+      "esri/layers/GraphicsLayer"
+    ], function (Map, MapView, Home, Sketch, Search, ScaleBar, Measurement, GraphicsLayer) {
+
+      const graphicsLayer = new GraphicsLayer();
+
+      const map = new Map({
+        basemap: "streets-navigation-vector",
+        layers: [graphicsLayer]
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [-79.8881, 43.2385], // Mohawk College
+        zoom: 14
+      });
+
+      // HOME WIDGET
+      const homeWidget = new Home({
+        view: view
+      });
+      view.ui.add(homeWidget, "top-left");
+
+      // SKETCH WIDGET
+      const sketch = new Sketch({
+        layer: graphicsLayer,
+        view: view
+      });
+      view.ui.add(sketch, "top-right");
+
+      // SEARCH WIDGET
+      const search = new Search({
+        view: view
+      });
+      view.ui.add(search, "top-right");
+
+      // SCALE BAR
+      const scaleBar = new ScaleBar({
+        view: view
+      });
+      view.ui.add(scaleBar, "bottom-left");
+
+      // MEASUREMENT
+      const measurement = new Measurement({
+        view: view
+      });
+      view.ui.add(measurement, "bottom-right");
+
+    });
+  </script>
+
+</body>
+</html>
