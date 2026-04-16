@@ -1,18 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Brant Street Web Map</title>
+  <title>Brant St ZBA Proposal - Clara Revollo</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
   <style>
-    body { margin:0; }
+    body { margin:0; font-family: Arial, sans-serif; }
+
     #map { height: 100vh; }
+
+    .info-box {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      padding: 15px;
+      max-width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .info-box h2 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+    }
+
+    .info-box p {
+      margin: 0 0 8px 0;
+    }
   </style>
 </head>
 
 <body>
+
 <div id="map"></div>
+
+<div class="info-box">
+  <h2>Brant St ZBA Proposal</h2>
+  <p><strong>Clara Revollo</strong></p>
+
+  <p>
+    This site represents a proposed development parcel along Brant Street in downtown Burlington.
+  </p>
+
+  <p>
+    A <strong>Zoning By-law Amendment (ZBA)</strong> is required to rezone the site from the existing 
+    <strong>DC-16 (Development Control)</strong> Zone to a 
+    <strong>Downtown Core (DW)</strong> Zone.
+  </p>
+
+  <p>
+    The proposed amendment will facilitate a mixed-use building and establish appropriate zoning standards to support the proposed built form.
+  </p>
+</div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
