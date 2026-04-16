@@ -1,116 +1,72 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
-  <title>Clara Revollo - ArcGIS Web Map</title>
+  <title>Brant Street Web Map</title>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
-  <script src="https://js.arcgis.com/4.29/"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
   <style>
-    html, body, #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-
-    #titleDiv {
-      position: absolute;
-      z-index: 99;
-      background: white;
-      padding: 8px 12px;
-      top: 10px;
-      left: 50px;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
+    body { margin:0; }
+    #map { height: 100vh; }
   </style>
 </head>
 
 <body>
+<div id="map"></div>
 
-  <div id="titleDiv">
-    Clara Revollo - Student #000921299 - ArcGIS JS Web Map Assignment 
-  </div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-  <div id="viewDiv"></div>
+<script>
+const proposedData = {
+  "type":"FeatureCollection",
+  "features":[
+    {
+      "type":"Feature",
+      "geometry":{
+        "type":"Polygon",
+        "coordinates":[[
+          [-79.80285384195629,43.32995022485604],
+          [-79.80263926497759,43.32978243243733],
+          [-79.80317034268543,43.3293648992679],
+          [-79.80212964532696,43.32865469630703],
+          [-79.80103530417297,43.32948976888639],
+          [-79.80231740040787,43.33033263471011],
+          [-79.80285384195629,43.32995022485604]
+        ]]
+      },
+      "properties":{
+        "Name":"Brant St Development",
+        "Type":"Mixed-use",
+        "Height":"20 storeys",
+        "Status":"Proposed"
+      }
+    }
+  ]
+};
 
-  <script>
-    require([
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/widgets/Home",
-      "esri/widgets/Sketch",
-      "esri/widgets/Search",
-      "esri/widgets/ScaleBar",
-      "esri/widgets/Measurement",
-      "esri/widgets/BasemapToggle",
-      "esri/layers/GraphicsLayer"
-    ], function (Map, MapView, Home, Sketch, Search, ScaleBar, Measurement, BasemapToggle, GraphicsLayer) {
+const map = L.map("map").setView([43.3295, -79.8021], 16);
 
-      // Graphics layer for Sketch drawings
-      const graphicsLayer = new GraphicsLayer();
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-      // Create map with satellite basemap
-      const map = new Map({
-        basemap: "satellite",
-        layers: [graphicsLayer]
-      });
+const layer = L.geoJSON(proposedData, {
+  style: {
+    color: "#8b5a2b",
+    weight: 3,
+    fillColor: "#c58b57",
+    fillOpacity: 0.45
+  },
+  onEachFeature: (f, l) => {
+    l.bindPopup(`
+      <strong>${f.properties.Name}</strong><br>
+      ${f.properties.Type}<br>
+      ${f.properties.Height}<br>
+      ${f.properties.Status}
+    `);
+  }
+}).addTo(map);
 
-      // Create MapView centered at Mohawk College
-      const view = new MapView({
-        container: "viewDiv",
-        map: map,
-        center: [-79.8881, 43.2385],
-        zoom: 14
-      });
-
-      // HOME WIDGET
-      const homeWidget = new Home({
-        view: view
-      });
-      view.ui.add(homeWidget, "top-left");
-
-      // SKETCH WIDGET
-      const sketch = new Sketch({
-        layer: graphicsLayer,
-        view: view
-      });
-      view.ui.add(sketch, "top-right");
-
-      // SEARCH WIDGET
-      const search = new Search({
-        view: view
-      });
-      view.ui.add(search, "top-right");
-
-      // SCALE BAR
-      const scaleBar = new ScaleBar({
-        view: view
-      });
-      view.ui.add(scaleBar, "bottom-left");
-
-      // MEASUREMENT
-      const measurement = new Measurement({
-        view: view
-      });
-      view.ui.add(measurement, "bottom-right");
-
-      // BASEMAP TOGGLE (switch between satellite and streets)
-      const basemapToggle = new BasemapToggle({
-        view: view,
-        nextBasemap: "streets-navigation-vector"
-      });
-      view.ui.add(basemapToggle, "bottom-right");
-
-    });
-  </script>
+map.fitBounds(layer.getBounds());
+</script>
 
 </body>
 </html>
